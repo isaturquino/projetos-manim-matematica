@@ -2,7 +2,7 @@ from manim import *
 
 # ============================================================
 # Dedução da Fórmula de Heron — versão melhorada
-#
+#1
 # Para rodar (qualidade baixa, preview rápido):
 #   python -m manim -pql heron.py TrabalhoHeron
 # Qualidade alta:
@@ -24,11 +24,16 @@ TOTAL_PARTES = 6
 
 
 class TrabalhoHeron(Scene):
+    """
+    Cena principal que apresenta a dedução da Fórmula de Heron para cálculo
+    da área de um triângulo usando apenas os três lados.
+    """
 
     # ------------------------------------------------------------------
     # Helpers reutilizáveis
     # ------------------------------------------------------------------
 
+    # Cria título com indicador opcional de progresso.
     def titulo(self, texto, parte=None):
         """Cria título com indicador opcional de progresso."""
         t = Text(texto, font_size=30, color=PURPLE, weight=BOLD).to_edge(UP, buff=0.3)
@@ -40,18 +45,22 @@ class TrabalhoHeron(Scene):
             return VGroup(t, prog)
         return t
 
+    # Anima a saída (FadeOut) de um ou mais objetos com tempo configurável.
     def limpar(self, *objetos, tempo=0.6):
         self.play(*[FadeOut(obj) for obj in objetos], run_time=tempo)
 
+    # Escreve uma sequência de equações uma por vez com animação Write.
     def escrever_sequencia(self, *equacoes, run_time=0.75):
         for eq in equacoes:
             self.play(Write(eq), run_time=run_time)
 
+    # Destaca um objeto criando uma caixa ao redor com animação Create.
     def destaque(self, obj, cor=ORANGE):
         box = SurroundingRectangle(obj, color=cor, buff=0.18, corner_radius=0.08)
         self.play(Create(box))
         return box
 
+    # Cria um quadrado de ângulo reto (marcador) em um ponto específico.
     def marcador_angulo_reto(self, ponto, tam=0.18):
         """Quadrado de ângulo reto centrado no canto superior-direito de H.
         Cresce para cima (direção da altura) e para a direita (direção de HC),
@@ -65,6 +74,7 @@ class TrabalhoHeron(Scene):
     # Estrutura principal
     # ------------------------------------------------------------------
 
+    # Método principal que coordena todas as partes da cena.
     def construct(self):
         self.camera.background_color = "#FAF7F0"
         self.abertura()
@@ -80,6 +90,7 @@ class TrabalhoHeron(Scene):
     # Abertura
     # ------------------------------------------------------------------
 
+    # Cena de abertura com título, subtítulo e preview da fórmula.
     def abertura(self):
         titulo = Text(
             "Dedução da Fórmula de Heron",
@@ -97,18 +108,24 @@ class TrabalhoHeron(Scene):
 
         grupo = VGroup(titulo, subtitulo, formula_preview).arrange(DOWN, buff=0.4)
 
+        # Animação FadeIn: aparece com deslocamento para cima
         self.play(FadeIn(titulo, shift=UP * 0.3), run_time=0.8)
+        # Animação FadeIn: aparece normalmente
         self.play(FadeIn(subtitulo), run_time=0.6)
+        # Animação FadeIn: aparece normalmente
         self.play(FadeIn(formula_preview), run_time=0.6)
         self.wait(2)
+        # Animação FadeOut: desaparece ao final da abertura
         self.play(FadeOut(grupo))
 
     # ------------------------------------------------------------------
     # Parte 1 — Triângulo e altura
     # ------------------------------------------------------------------
 
+    # Apresenta o triângulo inicial com vértices A, B, C e ponto H na base.
     def parte_1_triangulo(self):
         cabecalho = self.titulo("Começamos com um triângulo qualquer", parte=1)
+        # Animação Write: escreve o texto do cabeçalho
         self.play(Write(cabecalho))
 
         # Triângulo menor e centralizado na área útil (abaixo do título,
@@ -122,6 +139,7 @@ class TrabalhoHeron(Scene):
         altura    = DashedLine(A, H, color=PINK, stroke_width=3)
         ang_reto  = self.marcador_angulo_reto(H)
 
+        # Pontos do triângulo com animação Create
         pontos = VGroup(
             Dot(A, color=PURPLE, radius=0.07),
             Dot(B, color=PURPLE, radius=0.07),
@@ -129,6 +147,10 @@ class TrabalhoHeron(Scene):
             Dot(H, color=PINK,   radius=0.06),
         )
 
+        # Criação dos pontos com animação Create
+        self.play(Create(pontos))
+
+        # Labels do triângulo
         labels = VGroup(
             MathTex("A", color=DARK).next_to(A, UP,    buff=0.15),
             MathTex("B", color=DARK).next_to(B, LEFT,  buff=0.12),
@@ -160,6 +182,7 @@ class TrabalhoHeron(Scene):
     # Parte 2 — Encontrando x via Pitágoras
     # ------------------------------------------------------------------
 
+    # Deriva o valor de x usando o teorema de Pitágoras no triângulo.
     def parte_2_encontrando_x(self):
         A, B, C, H, triangulo, altura, ang_reto, pontos, labels = self.triangulo_data
 
