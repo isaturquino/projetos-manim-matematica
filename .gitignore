@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+
+# Ambiente virtual
+venv/
+.env
+node_modules/
+
+# VS Code
+.vscode/
+
+# Manim
+media/
+slides/
+Tex/
+*.log
+*.aux
+*.svg
+
+# Sistema
+.DS_Store
+Thumbs.db
